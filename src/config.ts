@@ -43,6 +43,14 @@ export const DEFAULT_CREDENTIALS = {
 };
 
 /**
+ * Configuration Discord par défaut
+ */
+export const DEFAULT_DISCORD_CONFIG = {
+  token: "your-discord-bot-token",
+  channelId: "your-discord-channel-id",
+};
+
+/**
  * Indicateurs d'URL pour une connexion réussie
  */
 export const SUCCESS_URL_INDICATORS = ["accounts"];

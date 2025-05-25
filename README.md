@@ -4,6 +4,16 @@ Script d'automatisation pour se connecter à Bankin en utilisant Puppeteer et Ty
 
 Ce script permet de récupérer automatiquement la somme des dépenses et des revenus de tous les comptes à la demande depuis l'application d'agrégation bancaire Bankin.
 
+## ✨ Fonctionnalités
+
+- 🔐 **Connexion automatique** à Bankin avec vos identifiants
+- 💸 **Récupération des dépenses** du mois en cours
+- 💰 **Récupération des revenus** du mois en cours
+- 📊 **Calcul du solde net** (revenus - dépenses)
+- 🔗 **Notifications Discord** avec des embeds colorés (optionnel)
+- 🛡️ **Gestion d'erreurs** complète avec notifications
+- 🎯 **Mode headless** ou visible pour le debug
+
 ## 🚀 Installation
 
 1. **Cloner ou télécharger le projet**
@@ -26,12 +36,16 @@ Ce script permet de récupérer automatiquement la somme des dépenses et des re
    BANKIN_EMAIL=votre-email@example.com
    BANKIN_PASSWORD=votre-mot-de-passe
    HEADLESS=true
+
+   # Configuration Discord (optionnel)
+   DISCORD_BOT_TOKEN=votre-token-bot-discord
+   DISCORD_CHANNEL_ID=votre-id-channel-discord
+   DISCORD_ENABLED=true
    ```
 
-4. **Créer le dossier pour les screenshots**
-   ```bash
-   mkdir screenshots
-   ```
+4. **Configuration Discord (optionnel)**
+
+   Pour recevoir les résultats financiers sur Discord, consultez le guide détaillé : [DISCORD_SETUP.md](./docs/DISCORD_SETUP.md)
 
 ## 🎯 Utilisation
 

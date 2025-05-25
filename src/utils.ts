@@ -1,5 +1,10 @@
 import { BankinCredentials, EnvironmentConfig } from "./types";
-import { DEFAULT_CREDENTIALS } from "./config";
+import { DEFAULT_CREDENTIALS, DEFAULT_DISCORD_CONFIG } from "./config";
+
+export interface DiscordConfig {
+  token: string;
+  channelId: string;
+}
 
 /**
  * Récupère les identifiants depuis les variables d'environnement
@@ -14,12 +19,44 @@ export function getCredentialsFromEnv(): BankinCredentials {
 }
 
 /**
+ * Récupère la configuration Discord depuis les variables d'environnement
+ */
+export function getDiscordConfigFromEnv(): DiscordConfig {
+  return {
+    token: process.env.DISCORD_BOT_TOKEN || DEFAULT_DISCORD_CONFIG.token,
+    channelId:
+      process.env.DISCORD_CHANNEL_ID || DEFAULT_DISCORD_CONFIG.channelId,
+  };
+}
+
+/**
  * Vérifie si les identifiants sont les valeurs par défaut
  */
 export function areDefaultCredentials(credentials: BankinCredentials): boolean {
   return (
     credentials.email === DEFAULT_CREDENTIALS.email ||
     credentials.password === DEFAULT_CREDENTIALS.password
+  );
+}
+
+/**
+ * Vérifie si la configuration Discord utilise les valeurs par défaut
+ */
+export function areDefaultDiscordConfig(config: DiscordConfig): boolean {
+  return (
+    config.token === DEFAULT_DISCORD_CONFIG.token ||
+    config.channelId === DEFAULT_DISCORD_CONFIG.channelId
+  );
+}
+
+/**
+ * Vérifie si Discord est configuré et activé
+ */
+export function isDiscordEnabled(): boolean {
+  const discordConfig = getDiscordConfigFromEnv();
+  return (
+    !areDefaultDiscordConfig(discordConfig) &&
+    process.env.DISCORD_ENABLED !== "false"
   );
 }
 
