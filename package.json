@@ -10,7 +10,14 @@
     "dev:watch": "ts-node-dev --respawn --transpile-only src/index.ts",
     "dev:debug": "ts-node --inspect src/index.ts",
     "clean": "rimraf dist",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "docker:build": "docker build -t bankin-finance-scraper .",
+    "docker:run": "docker run --rm --env-file .env bankin-finance-scraper",
+    "docker:dev": "docker run --rm --env-file .env bankin-finance-scraper dev",
+    "docker:shell": "docker run --rm -it --env-file .env bankin-finance-scraper sh",
+    "docker:compose:up": "docker compose up bankin-scraper",
+    "docker:compose:build": "docker compose build",
+    "docker:compose:dev": "docker compose run --rm bankin-scraper-cli dev"
   },
   "keywords": [
     "puppeteer",

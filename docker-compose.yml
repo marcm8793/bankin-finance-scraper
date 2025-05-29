@@ -1,0 +1,41 @@
+services:
+  bankin-scraper:
+    build: .
+    container_name: bankin-finance-scraper
+    restart: unless-stopped
+    environment:
+      # Variables d'environnement par défaut
+      - HEADLESS=true
+      - DISCORD_ENABLED=true
+    env_file:
+      - .env
+    # Limites de ressources
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "0.5"
+    # Configuration de sécurité
+    security_opt:
+      - no-new-privileges:true
+    # Capabilities minimales pour Puppeteer
+    cap_add:
+      - SYS_ADMIN
+    # Partage de l'espace de noms pour Chrome
+    shm_size: 2gb
+
+  # Service pour exécuter des commandes ponctuelles
+  bankin-scraper-cli:
+    build: .
+    container_name: bankin-finance-scraper-cli
+    environment:
+      - HEADLESS=true
+      - DISCORD_ENABLED=true
+    env_file:
+      - .env
+    profiles:
+      - cli
+    # Utiliser le script d'entrée standard
+    # Cette configuration permet d'exécuter: docker compose run --rm bankin-scraper-cli dev
+    stdin_open: true
+    tty: true

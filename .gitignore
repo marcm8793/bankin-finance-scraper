@@ -63,3 +63,8 @@ ehthumbs.db
 .idea/
 *.swp
 *.swo
+
+# Docker
+.docker/
+docker-compose.override.yml
+.dockerignore.bak
