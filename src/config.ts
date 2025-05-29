@@ -10,7 +10,16 @@ export const BANKIN_SIGNIN_URL = "https://app2.bankin.com/signin";
  */
 export const DEFAULT_PUPPETEER_CONFIG: PuppeteerConfig = {
   headless: true,
-  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-accelerated-2d-canvas",
+    "--no-first-run",
+    "--no-zygote",
+    "--single-process",
+    "--disable-gpu",
+  ],
   viewport: {
     width: 1280,
     height: 720,

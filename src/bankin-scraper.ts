@@ -28,10 +28,17 @@ export class BankinScraper {
   async launch(): Promise<void> {
     console.log("🚀 Lancement du navigateur...");
 
-    this.browser = await puppeteer.launch({
+    const launchOptions: any = {
       headless: shouldRunHeadless(),
       args: DEFAULT_PUPPETEER_CONFIG.args,
-    });
+    };
+
+    // Use system Chromium if available (for cloud deployments like Render)
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+
+    this.browser = await puppeteer.launch(launchOptions);
 
     this.page = await this.browser.newPage();
     await this.page.setViewport(DEFAULT_PUPPETEER_CONFIG.viewport);
