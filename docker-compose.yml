@@ -9,12 +9,9 @@ services:
       - DISCORD_ENABLED=true
     env_file:
       - .env
-    # Limites de ressources
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: "0.5"
+    # Limites de ressources (compatible avec Docker Compose v2)
+    mem_limit: 1G
+    cpus: "0.5"
     # Configuration de sécurité
     security_opt:
       - no-new-privileges:true
@@ -35,6 +32,9 @@ services:
       - .env
     profiles:
       - cli
+    # Limites de ressources pour le CLI aussi
+    mem_limit: 1G
+    cpus: "0.5"
     # Utiliser le script d'entrée standard
     # Cette configuration permet d'exécuter: docker compose run --rm bankin-scraper-cli dev
     stdin_open: true
