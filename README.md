@@ -13,6 +13,7 @@ Ce script permet de récupérer automatiquement la somme des dépenses et des re
 - 🔗 **Notifications Discord** avec des embeds colorés (optionnel)
 - 🛡️ **Gestion d'erreurs** complète avec notifications
 - 🎯 **Mode headless** ou visible pour le debug
+- 🚂 **Déploiement cloud** sur Railway
 
 ## 🚀 Installation
 
@@ -99,4 +100,28 @@ npm run clean
 
 ```bash
 npm run type-check
+```
+
+## 🚂 Déploiement sur Railway
+
+Ce projet est optimisé pour le déploiement sur Railway. Consultez le guide détaillé : [RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)
+
+### Déploiement rapide
+
+1. Créez un compte sur [Railway](https://railway.app)
+2. Connectez votre repository GitHub
+3. Configurez les variables d'environnement
+4. Railway déploiera automatiquement votre application
+
+### Exécution programmée
+
+- Utilisez les cron jobs de Railway pour une exécution régulière
+- Ou configurez GitHub Actions pour déclencher le déploiement
+
+## 🐳 Test Docker
+
+Pour tester le build Docker localement :
+
+```bash
+./test-docker.sh
 ```

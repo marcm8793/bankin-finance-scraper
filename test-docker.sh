@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Test script for Docker build and run
-# This helps verify everything works before deploying to Render
+# This helps verify everything works before deploying to Railway
 
 echo "🐳 Building Docker image..."
 docker build -t bankin-scraper-test .
@@ -14,7 +14,7 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "⚠️  Remember to replace the email and password with your actual credentials"
     echo ""
-    echo "🚀 Ready for Render deployment!"
+    echo "🚂 Ready for Railway deployment!"
 else
     echo "❌ Docker build failed. Check the errors above."
     exit 1
