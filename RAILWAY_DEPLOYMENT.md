@@ -110,6 +110,7 @@ jobs:
 
    - Railway has excellent Puppeteer support out of the box
    - Ensure environment variables are set correctly
+   - The project uses optimized Chrome flags to prevent "Target closed" errors
 
 2. **Build fails**
 
@@ -128,9 +129,15 @@ jobs:
    - Ensure bot has permissions to send messages
 
 5. **Docker build issues**
+
    - The Dockerfile has been optimized for Alpine Linux
    - Uses native `rm -rf` instead of `rimraf` for better compatibility
    - Installs all dependencies, builds, then removes devDependencies
+
+6. **"Target closed" or browser errors**
+   - The project includes optimized Puppeteer configuration
+   - Removes problematic flags like `--single-process` and `--no-zygote`
+   - Includes proper error handling and debugging information
 
 ### Debug Mode:
 

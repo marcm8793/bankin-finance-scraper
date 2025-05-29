@@ -31,17 +31,45 @@ export class BankinScraper {
     const launchOptions: any = {
       headless: shouldRunHeadless(),
       args: DEFAULT_PUPPETEER_CONFIG.args,
+      ignoreDefaultArgs: ["--disable-extensions"],
+      timeout: 180000, // 3 minutes timeout
     };
 
-    // Use system Chromium if available (for cloud deployments like Render)
+    // Use system Chromium if available (for cloud deployments like Railway)
     if (process.env.PUPPETEER_EXECUTABLE_PATH) {
       launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      console.log(
+        `🔧 Utilisation de Chromium système: ${process.env.PUPPETEER_EXECUTABLE_PATH}`
+      );
     }
 
-    this.browser = await puppeteer.launch(launchOptions);
+    console.log(
+      "🔧 Options de lancement:",
+      JSON.stringify(launchOptions, null, 2)
+    );
 
-    this.page = await this.browser.newPage();
-    await this.page.setViewport(DEFAULT_PUPPETEER_CONFIG.viewport);
+    try {
+      this.browser = await puppeteer.launch(launchOptions);
+      console.log("✅ Navigateur lancé avec succès");
+
+      this.page = await this.browser.newPage();
+      console.log("✅ Nouvelle page créée");
+
+      await this.page.setViewport(DEFAULT_PUPPETEER_CONFIG.viewport);
+      console.log("✅ Viewport configuré");
+
+      // Add error handlers for the page
+      this.page.on("error", (error) => {
+        console.error("❌ Erreur de page:", error);
+      });
+
+      this.page.on("pageerror", (error) => {
+        console.error("❌ Erreur JavaScript de page:", error);
+      });
+    } catch (error) {
+      console.error("❌ Erreur lors du lancement du navigateur:", error);
+      throw error;
+    }
   }
 
   /**
