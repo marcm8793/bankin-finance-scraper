@@ -14,6 +14,7 @@ Ce script permet de récupérer automatiquement la somme des dépenses et des re
 - 🛡️ **Gestion d'erreurs** complète avec notifications
 - 🎯 **Mode headless** ou visible pour le debug
 - 🚂 **Déploiement cloud** sur Railway
+- 🔄 **Retry automatique** et timeouts optimisés pour le cloud
 
 ## 🚀 Installation
 

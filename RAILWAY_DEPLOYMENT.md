@@ -135,9 +135,16 @@ jobs:
    - Installs all dependencies, builds, then removes devDependencies
 
 6. **"Target closed" or browser errors**
+
    - The project includes optimized Puppeteer configuration
    - Removes problematic flags like `--single-process` and `--no-zygote`
    - Includes proper error handling and debugging information
+
+7. **Navigation timeout errors**
+   - Timeouts have been increased for cloud environments (60s navigation, 30s selectors)
+   - Automatic retry logic with progressive backoff (3 attempts for navigation)
+   - Fallback logic to check if login succeeded despite navigation timeout
+   - All page navigations include robust error handling
 
 ### Debug Mode:
 

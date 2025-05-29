@@ -33,8 +33,8 @@ export const DEFAULT_PUPPETEER_CONFIG: PuppeteerConfig = {
  * Configuration des timeouts (en millisecondes)
  */
 export const TIMEOUTS: TimeoutConfig = {
-  selector: 10000,
-  navigation: 15000,
+  selector: 30000, // 30 seconds for element selection
+  navigation: 60000, // 60 seconds for navigation
 };
 
 /**

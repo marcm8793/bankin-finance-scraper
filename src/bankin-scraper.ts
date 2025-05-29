@@ -73,7 +73,7 @@ export class BankinScraper {
   }
 
   /**
-   * Navigue vers la page de connexion Bankin
+   * Navigue vers la page de connexion Bankin avec retry
    */
   async navigateToSignIn(): Promise<void> {
     if (!this.page) {
@@ -82,8 +82,39 @@ export class BankinScraper {
       );
     }
 
-    console.log("📍 Navigation vers la page de connexion Bankin...");
-    await this.page.goto(BANKIN_SIGNIN_URL, { waitUntil: "networkidle2" });
+    const maxRetries = 3;
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(
+          `📍 Navigation vers la page de connexion Bankin (tentative ${attempt}/${maxRetries})...`
+        );
+
+        await this.page.goto(BANKIN_SIGNIN_URL, {
+          waitUntil: "networkidle2",
+          timeout: TIMEOUTS.navigation,
+        });
+
+        console.log("✅ Navigation réussie");
+        return; // Success, exit the retry loop
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        console.warn(`⚠️ Tentative ${attempt} échouée:`, lastError.message);
+
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 2000; // Progressive backoff: 2s, 4s
+          console.log(
+            `⏳ Attente de ${waitTime}ms avant nouvelle tentative...`
+          );
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+        }
+      }
+    }
+
+    throw new Error(
+      `Navigation échouée après ${maxRetries} tentatives. Dernière erreur: ${lastError?.message}`
+    );
   }
 
   /**
@@ -117,7 +148,7 @@ export class BankinScraper {
   }
 
   /**
-   * Soumet le formulaire de connexion
+   * Soumet le formulaire de connexion avec retry
    */
   async submitLoginForm(): Promise<void> {
     if (!this.page) {
@@ -128,10 +159,49 @@ export class BankinScraper {
     await this.page.click(SELECTORS.submitButton);
 
     console.log("⏳ Attente de la réponse de connexion...");
-    await this.page.waitForNavigation({
-      waitUntil: "networkidle2",
-      timeout: TIMEOUTS.navigation,
-    });
+
+    const maxRetries = 2;
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(
+          `⏳ Tentative d'attente de navigation ${attempt}/${maxRetries}...`
+        );
+
+        await this.page.waitForNavigation({
+          waitUntil: "networkidle2",
+          timeout: TIMEOUTS.navigation,
+        });
+
+        console.log("✅ Navigation après soumission réussie");
+        return; // Success
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        console.warn(
+          `⚠️ Tentative ${attempt} de navigation échouée:`,
+          lastError.message
+        );
+
+        if (attempt < maxRetries) {
+          console.log("⏳ Attente supplémentaire avant nouvelle tentative...");
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+        }
+      }
+    }
+
+    // If navigation fails, check if we're already on the right page
+    const currentUrl = this.page.url();
+    console.log(`🌐 URL actuelle après échec de navigation: ${currentUrl}`);
+
+    if (currentUrl.includes("accounts") || currentUrl.includes("dashboard")) {
+      console.log("✅ Semble être connecté malgré l'échec de navigation");
+      return;
+    }
+
+    throw new Error(
+      `Navigation après soumission échouée après ${maxRetries} tentatives. Dernière erreur: ${lastError?.message}`
+    );
   }
 
   /**
@@ -200,6 +270,55 @@ export class BankinScraper {
   }
 
   /**
+   * Navigue vers une URL avec retry et gestion d'erreurs robuste
+   */
+  private async navigateToPage(
+    url: string,
+    description: string
+  ): Promise<void> {
+    if (!this.page) {
+      throw new Error("La page n'est pas initialisée.");
+    }
+
+    const maxRetries = 3;
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(
+          `📊 ${description} (tentative ${attempt}/${maxRetries})...`
+        );
+
+        await this.page.goto(url, {
+          waitUntil: "networkidle2",
+          timeout: TIMEOUTS.navigation,
+        });
+
+        console.log(`✅ Navigation vers ${description} réussie`);
+        return;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        console.warn(
+          `⚠️ Tentative ${attempt} échouée pour ${description}:`,
+          lastError.message
+        );
+
+        if (attempt < maxRetries) {
+          const waitTime = attempt * 2000;
+          console.log(
+            `⏳ Attente de ${waitTime}ms avant nouvelle tentative...`
+          );
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+        }
+      }
+    }
+
+    throw new Error(
+      `Navigation vers ${description} échouée après ${maxRetries} tentatives. Dernière erreur: ${lastError?.message}`
+    );
+  }
+
+  /**
    * Navigue vers la page des catégories et récupère le total des dépenses
    */
   async getExpensesTotal(targetMonth: string): Promise<{
@@ -214,9 +333,10 @@ export class BankinScraper {
 
     try {
       console.log("📊 Navigation vers la page des catégories...");
-      await this.page.goto("https://app2.bankin.com/categories", {
-        waitUntil: "networkidle2",
-      });
+      await this.navigateToPage(
+        "https://app2.bankin.com/categories",
+        "la page des catégories"
+      );
 
       // Attendre que la page soit chargée
       await this.page.waitForSelector("#monthSelector", {
@@ -314,9 +434,10 @@ export class BankinScraper {
 
     try {
       console.log("💰 Navigation vers la page des revenus...");
-      await this.page.goto("https://app2.bankin.com/categories/2", {
-        waitUntil: "networkidle2",
-      });
+      await this.navigateToPage(
+        "https://app2.bankin.com/categories/2",
+        "la page des revenus"
+      );
 
       // Attendre que la page soit chargée
       await this.page.waitForSelector("#monthSelector", {
