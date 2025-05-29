@@ -30,8 +30,8 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
-# Build the TypeScript code
-RUN npm run build
+# Clean any existing dist folder and build the TypeScript code
+RUN rm -rf dist && npx tsc
 
 # Remove devDependencies after build to reduce image size
 RUN npm prune --production

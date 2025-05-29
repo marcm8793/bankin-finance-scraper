@@ -4,15 +4,14 @@
   "description": "Script d'automatisation pour Bankin avec Puppeteer en TypeScript",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "start": "npm run build && node dist/index.js",
     "start:prod": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "dev:watch": "ts-node-dev --respawn --transpile-only src/index.ts",
     "dev:debug": "ts-node --inspect src/index.ts",
-    "clean": "rimraf dist",
-    "type-check": "tsc --noEmit",
-    "prebuild": "npm run clean"
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "puppeteer",

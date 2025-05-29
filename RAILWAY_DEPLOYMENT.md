@@ -114,7 +114,8 @@ jobs:
 2. **Build fails**
 
    - Check the build logs in Railway dashboard
-   - Verify TypeScript compilation works locally
+   - Verify TypeScript compilation works locally with `./test-build.sh`
+   - The project uses `rm -rf dist && npx tsc` for reliable cross-platform builds
 
 3. **Login fails**
 
@@ -122,8 +123,14 @@ jobs:
    - Check if Bankin has additional security measures
 
 4. **Discord notifications not working**
+
    - Verify bot token and channel ID
    - Ensure bot has permissions to send messages
+
+5. **Docker build issues**
+   - The Dockerfile has been optimized for Alpine Linux
+   - Uses native `rm -rf` instead of `rimraf` for better compatibility
+   - Installs all dependencies, builds, then removes devDependencies
 
 ### Debug Mode:
 
@@ -132,6 +139,7 @@ To debug issues:
 - Check the logs in Railway dashboard
 - Add console.log statements in your code
 - Use Railway's built-in monitoring tools
+- Test locally with `./test-build.sh` before deploying
 
 ## 💰 Cost Considerations
 
