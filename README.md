@@ -120,8 +120,16 @@ Ce projet est optimisé pour le déploiement sur Railway. Consultez le guide dé
 
 ## 🐳 Test Docker
 
-Pour tester le build Docker localement :
+Pour tester le build Docker localement (nécessite Docker):
 
 ```bash
 ./test-docker.sh
+```
+
+## 🔧 Test de compilation
+
+Pour tester uniquement la compilation TypeScript:
+
+```bash
+./test-build.sh
 ```
