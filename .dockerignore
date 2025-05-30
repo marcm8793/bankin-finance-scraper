@@ -25,9 +25,7 @@ logs/
 .gitignore
 
 # Docker files (not needed inside container)
-Dockerfile
-docker-compose.yml
-docker-compose.override.yml
+# Removed exclusion for Dockerfile and docker-compose.yml
 .dockerignore
 .dockerignore.bak
 .docker/
