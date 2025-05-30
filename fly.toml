@@ -1,0 +1,11 @@
+app = "bankin-finance-scraper"  # Change to your preferred app name
+primary_region = "lax"  # Choose region (e.g., "lax", "ord", "iad")
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3000  # Must match Dockerfile EXPOSE port
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
